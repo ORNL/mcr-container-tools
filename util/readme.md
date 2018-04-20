@@ -1,0 +1,8 @@
+# Dependency Discovery
+To discover the names of packages known to YUM that contain the shared object (SO) libraries required by Executable and Linkable Format (ELF) files, one can use the 'discoverDeps.sh' script in conjunction with the 'provides' feature of YUM.  A similar process should be applicable to other distributions not derived from Redhat Enterprise Linux (e.g. Ubuntu, Debian, etc), but one will need to use the appropriate package manager for one's environment to discover package names (e.g. APT for Debian derived distributions) after determining the list of missing SO files using the script.
+
+## SO Listing
+Execute `discoverDeps.sh -l -p /path/to/app`, where '/path/to/app' is the path (hence the '-p') to where the application of interest has been deployed.  The script will then recursively search for ELF / SO files in that directory (and its subdirectories), determine SO dependencies, and present a list of said SO files with ones already 'found' on the system excluded.  'Found' is defined as either being known to 'ldconfig' (enabled with the '-l' flag to 'discoverDeps.sh') or said SO dependency was found in the specified directory (or its subdirectories).
+
+## Package Lookup
+With said list of missing SO files, use `yum provides LIBRARY_NAME`, where 'LIBRARY\_NAME' is an SO library, to determine the package that said SO resides in.  It is suggested that one enables at least the default CentOS 7, [RPM Fusion (free)](https://rpmfusion.org/), and [EPEL](https://fedoraproject.org/wiki/EPEL) repositories before searching for packages with 'yum provides' so that YUM is aware of a wide(r) number of packages.
